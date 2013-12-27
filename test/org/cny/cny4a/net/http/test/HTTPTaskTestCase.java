@@ -168,7 +168,7 @@ public class HTTPTaskTestCase extends
 
 			@Override
 			public void run() {
-				HTTP.doGetDown("http://192.168.1.76:8000/dl?sw=5",
+				HTTP.doGetDown("http://localhost:8000/dl?sw=5",
 						new HTTPNameDlCallback(dl.getAbsolutePath()) {
 
 							@Override
