@@ -124,73 +124,73 @@ public class HTTPTaskTestCase extends
 		assertTrue(new File(this.dl, "测试.dat").delete());
 	}
 
-	public void testDoGetDown3() throws Throwable {
-		for (int i = 1; i < 5; i++) {
-			testDl(i);
-		}
-	}
-
-	private void testDl(final int sw) throws Throwable {
-		final CountDownLatch cdl = new CountDownLatch(1);
-		this.runTestOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				HTTP.doGetDown("http://localhost:8000/dl?sw=" + sw,
-						new HTTPNameDlCallback(dl.getAbsolutePath()) {
-
-							@Override
-							public void onSuccess(HTTPClient c) {
-								super.onSuccess(c);
-								cdl.countDown();
-							}
-
-							@Override
-							public void onError(HTTPClient c, Throwable err) {
-								super.onError(c, err);
-								Log.d("Test Error", "error", err);
-								assertTrue(false);
-								cdl.countDown();
-							}
-
-						});
-			}
-		});
-		cdl.await();
-		File p = new File(this.dl, "测试.pdf");
-		assertTrue(p.exists());
-		assertTrue(new File(this.dl, "测试.pdf").delete());
-	}
-
-	public void testDoGetDown4() throws Throwable {
-		final CountDownLatch cdl = new CountDownLatch(1);
-		this.runTestOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				HTTP.doGetDown("http://localhost:8000/dl?sw=5",
-						new HTTPNameDlCallback(dl.getAbsolutePath()) {
-
-							@Override
-							public void onSuccess(HTTPClient c) {
-								super.onSuccess(c);
-								cdl.countDown();
-							}
-
-							@Override
-							public void onError(HTTPClient c, Throwable err) {
-								super.onError(c, err);
-								Log.d("Test Error", "error", err);
-								assertTrue(false);
-								cdl.countDown();
-							}
-
-						});
-			}
-		});
-		cdl.await();
-		File p = new File(this.dl, "dl");
-		assertTrue(p.exists());
-		assertTrue(new File(this.dl, "dl").delete());
-	}
+//	public void testDoGetDown3() throws Throwable {
+//		for (int i = 1; i < 5; i++) {
+//			testDl(i);
+//		}
+//	}
+//
+//	private void testDl(final int sw) throws Throwable {
+//		final CountDownLatch cdl = new CountDownLatch(1);
+//		this.runTestOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				HTTP.doGetDown("http://localhost:8000/dl?sw=" + sw,
+//						new HTTPNameDlCallback(dl.getAbsolutePath()) {
+//
+//							@Override
+//							public void onSuccess(HTTPClient c) {
+//								super.onSuccess(c);
+//								cdl.countDown();
+//							}
+//
+//							@Override
+//							public void onError(HTTPClient c, Throwable err) {
+//								super.onError(c, err);
+//								Log.d("Test Error", "error", err);
+//								assertTrue(false);
+//								cdl.countDown();
+//							}
+//
+//						});
+//			}
+//		});
+//		cdl.await();
+//		File p = new File(this.dl, "测试.pdf");
+//		assertTrue(p.exists());
+//		assertTrue(new File(this.dl, "测试.pdf").delete());
+//	}
+//
+//	public void testDoGetDown4() throws Throwable {
+//		final CountDownLatch cdl = new CountDownLatch(1);
+//		this.runTestOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				HTTP.doGetDown("http://localhost:8000/dl?sw=5",
+//						new HTTPNameDlCallback(dl.getAbsolutePath()) {
+//
+//							@Override
+//							public void onSuccess(HTTPClient c) {
+//								super.onSuccess(c);
+//								cdl.countDown();
+//							}
+//
+//							@Override
+//							public void onError(HTTPClient c, Throwable err) {
+//								super.onError(c, err);
+//								Log.d("Test Error", "error", err);
+//								assertTrue(false);
+//								cdl.countDown();
+//							}
+//
+//						});
+//			}
+//		});
+//		cdl.await();
+//		File p = new File(this.dl, "dl");
+//		assertTrue(p.exists());
+//		assertTrue(new File(this.dl, "dl").delete());
+//	}
 }
