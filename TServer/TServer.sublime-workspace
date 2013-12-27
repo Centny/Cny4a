@@ -1,0 +1,698 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"resp",
+				"ResponseWriter	interface ¡"
+			],
+			[
+				"cny",
+				"Cny4go"
+			],
+			[
+				"fu",
+				"func main	func main {...} ʂ"
+			],
+			[
+				"in",
+				"InitWithReader	error ƒ"
+			],
+			[
+				"f",
+				"FilePath	 ƒ"
+			],
+			[
+				"h",
+				"HandleFunc	 ƒ"
+			],
+			[
+				"ma",
+				"MaxFloat64	 Ɩ"
+			],
+			[
+				"pr",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"op",
+				"Open	file *os.File, err error ƒ"
+			],
+			[
+				"c",
+				"Chmod	error ƒ"
+			],
+			[
+				"re",
+				"reader	*bufio.Reader ν"
+			],
+			[
+				"rea",
+				"ReadLine	[]byte, error ƒ"
+			],
+			[
+				"st",
+				"Stderr	*os.File ν"
+			],
+			[
+				"new",
+				"NewTWriter	*TimeFlushWriter ƒ"
+			],
+			[
+				"D",
+				"D	 ƒ"
+			],
+			[
+				"setw",
+				"SetWriterFlag	 ƒ"
+			],
+			[
+				"E",
+				"ERROR	 Ɩ"
+			],
+			[
+				"W",
+				"WARNING	 Ɩ"
+			],
+			[
+				"n",
+				"NewDateSwitchWriter	*DateSwitchWriter ƒ"
+			],
+			[
+				"tim",
+				"TimeWriterWait	 ƒ"
+			],
+			[
+				"fun",
+				"func	func {...} ʂ"
+			],
+			[
+				"wr",
+				"Writer	*bufio.Writer ƒ"
+			],
+			[
+				"read",
+				"ReadLine	line []byte, isPrefix bool, err error ƒ"
+			],
+			[
+				"by",
+				"bys	[]byte ν"
+			],
+			[
+				"bu",
+				"NewBuffer	*bytes.Buffer ƒ"
+			],
+			[
+				"r",
+				"ReadLine	line []byte, isPrefix bool, err error ƒ"
+			],
+			[
+				"wri",
+				"WriteString	int, error ƒ"
+			],
+			[
+				"sp",
+				"Sprintf	string ƒ"
+			],
+			[
+				"p",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"Go",
+				"GOPATH"
+			],
+			[
+				"sd",
+				"Stdout	*os.File ν"
+			],
+			[
+				"set",
+				"SetLevel	 ƒ"
+			],
+			[
+				"l",
+				"LstdFlags	 Ɩ"
+			],
+			[
+				"log",
+				"LogLevel	int ʈ"
+			],
+			[
+				"Log",
+				"LogLevel	int ʈ"
+			],
+			[
+				"mkd",
+				"MkdirAll	error ƒ"
+			],
+			[
+				"moded",
+				"ModeDir	 Ɩ"
+			],
+			[
+				"w",
+				"WriteString	int, error ƒ"
+			],
+			[
+				"fl",
+				"FLOG_CLOCK_DELAY	 Ɩ"
+			],
+			[
+				"rm",
+				"RemoveAll	error ƒ"
+			],
+			[
+				"run",
+				"runtime"
+			],
+			[
+				"sho",
+				"ShowChinese	 ƒ"
+			],
+			[
+				"a",
+				"func main	func main {...} ʂ"
+			],
+			[
+				"s",
+				"SaySome	 ƒ"
+			],
+			[
+				"go",
+				"Gosched	 ƒ"
+			],
+			[
+				"d",
+				"Duration	int64 ʈ"
+			],
+			[
+				"mi",
+				"Millisecond	 Ɩ"
+			],
+			[
+				"Tu",
+				"T_User	struct ʈ"
+			],
+			[
+				"sh",
+				"ShowPwd	 ƒ"
+			],
+			[
+				"fil",
+				"file_name"
+			],
+			[
+				"act",
+				"active_view"
+			],
+			[
+				"win",
+				"window"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/org.cny.cny4a.ts/main/main.go",
+			"settings":
+			{
+				"buffer_size": 129,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "OnCmd",
+			"settings":
+			{
+				"buffer_size": 115,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/org.cny.cny4a.ts/tdl/tdl.go",
+			"settings":
+			{
+				"buffer_size": 1963,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"run",
+				"GoGdb: RunCmd"
+			],
+			[
+				"arp",
+				"GoSublime: Add/Remove package"
+			],
+			[
+				"apr",
+				"GoSublime: Add/Remove package"
+			],
+			[
+				"ar",
+				"GoSublime: Add/Remove package"
+			],
+			[
+				"ru",
+				"GoGdb: RunCmd"
+			],
+			[
+				"runc",
+				"GoGdb: RunCmd"
+			],
+			[
+				"rucn",
+				"GoGdb: RunCmd"
+			],
+			[
+				"rc",
+				"GoGdb: RunCmd"
+			],
+			[
+				"gogd",
+				"GoGdb: RunCmd"
+			],
+			[
+				"gogdb",
+				"GoGdb: RunCmd"
+			],
+			[
+				"go",
+				"GoSublime: Run build command"
+			],
+			[
+				"pcip",
+				"Package Control: Install Package"
+			],
+			[
+				"pcrp",
+				"Package Control: Remove Package"
+			],
+			[
+				"pc",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"gosublime",
+				"Set Syntax: GoSublime: 9o"
+			],
+			[
+				"open",
+				"GoSublime: Open Error Log"
+			],
+			[
+				"prp",
+				"Package Control: Remove Package"
+			],
+			[
+				"poin",
+				"SublimeGDB: Open Breakpoint View"
+			],
+			[
+				"sho",
+				"GoSublime: Show errors"
+			],
+			[
+				"rt",
+				"GoGdb: Run Test"
+			],
+			[
+				"se",
+				"Set Syntax: Erlang"
+			],
+			[
+				"stop",
+				"GoGdb: Stop"
+			],
+			[
+				"dt",
+				"GoGdb: Debug Test"
+			],
+			[
+				"de",
+				"GoGdb: Debug Test"
+			],
+			[
+				"gsarp",
+				"GoSublime: Add/Remove package"
+			]
+		],
+		"width": 467.0
+	},
+	"console":
+	{
+		"height": 242.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/cny/git/Centny/Cny4a/TServer/OnCmd",
+		"/Users/cny/git/Centny/Cny4a/TServer/TServer.sublime-project",
+		"/Users/cny/git/Centny/Cny4a/TServer/src/org.cny.cny4a.ts",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/thttp",
+		"/Users/cny/git/Centny/Cny4go/src/cny/log/log.go",
+		"/Users/cny/git/Centny/Cny4go/src/github.com/Centny/Cny4go/log/log_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/github.com/Centny/Cny4go/smartio/twriter_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/github.com/Centny/Cny4go/log/log.go",
+		"/Users/cny/git/Centny/Cny4go/src/github.com/Centny/Cny4go/util/fcfg_data.properties",
+		"/Users/cny/git/Centny/Cny4go/src/cny/smartio/twriter_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/smartio/twriter.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/log/tlog.go",
+		"/usr/local/go/src/pkg/io/io.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/smartio/dwriter.go",
+		"/Users/cny/git/Centny/Cny4go/OnCmd",
+		"/Users/cny/git/Centny/Cny4go/src/cny/cny.go",
+		"/Users/cny/git/Cny4go/util/util_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/util.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/Fcfg.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/twriter/twriter_test.go",
+		"/Users/cny/git/Cny4go/twriter/twriter_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/common_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/util_test.go",
+		"/Users/cny/git/Cny4go/util/util.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/Fcfg_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/twriter/twriter.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/log/log_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/common.go",
+		"/Users/cny/svn/Dev/LogSys/LogServer/LogServer.sublime-project",
+		"/Users/cny/Library/Application Support/Sublime Text 3/Packages/GoSublime/CHANGELOG.md",
+		"/usr/local/go/src/pkg/log/log.go",
+		"/usr/local/go/src/pkg/os/path.go",
+		"/usr/local/go/src/pkg/os/types.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/cny.go",
+		"/usr/local/go/src/pkg/fmt/print.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/log/twriter/fs.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/log/twriter/fs_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/inherit/inherit.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/util/cny_test.go",
+		"/Users/cny/Library/Application Support/Sublime Text 3/Packages/GoSublime/USAGE.md",
+		"/Users/cny/Library/Application Support/Sublime Text 3/Packages/GoSublime/GoSublime.sublime-settings",
+		"/Users/cny/git/Centny/Cny4go/Cny4go.sublime-project",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tmysql/tmysql.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/main/main.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tcode/tcode_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tbeedb/tbeedb_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/cny/cny_test.go",
+		"/Users/cny/Downloads/a.xml",
+		"/Users/cny/Library/Application Support/Sublime Text 3/Packages/GoGdb/GoGdb.sublime-settings",
+		"/Users/cny/svn/git/Centny/Cny4go/src/org.centny.test/main/main.go",
+		"/Users/cny/Downloads/1380279384_WordPress.svg",
+		"/Users/cny/Tmp/baidu.html",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/User/GoSublime.sublime-settings",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/User/GoGdb.sublime-settings",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoSublime/GoSublime.sublime-settings",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoGdb/GoGdb.sublime-settings",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoGdb/Default.sublime-keymap",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoSublime/Default (OSX).sublime-keymap",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/User/GoSublime/osx-x64/log.txt",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tcode/tcode.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/syntax/syntax.go",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/Cny/BB.build-system",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tsync/tsync.go",
+		"/usr/local/go/src/pkg/database/sql/sql.go",
+		"/Users/cny/Downloads/AAAPackageDev.sublime-package",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoSublime/9o.md",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoSublime/CHANGELOG.md",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tsync/tsync_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/toracle/toracle_test.go",
+		"/Users/cny/git/Centny/Cny4go/src/org.centny.test/tbeedb/tbeedb.go",
+		"/Users/cny/Develop/Go/TGoPrj/src/centny/main/main.go",
+		"/Users/cny/git/GoGdb/gsstest.py",
+		"/Users/cny/Develop/Go/TGoPrj/src/centny/tcode/tcode.go",
+		"/Users/cny/Develop/Go/TGoPrj/src/centny/tcode/tcode_test.go",
+		"/Users/cny/Develop/Go/TGoPrj/TGoPrj.sublime-project",
+		"/Users/cny/Develop/Go/TGoPrj/src/untitled",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/SideBarEnhancements/messages/11.13.2012.1305.0.txt",
+		"/Users/cny/Library/Application Support/Sublime Text 2/Packages/GoSublime/USAGE.md"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"d.fw",
+			"panic",
+			"Abs",
+			"AbsPoorer",
+			"l.",
+			"println",
+			"Output",
+			"println",
+			"gopath",
+			"GOPATH",
+			"9o",
+			"class GDBView",
+			"map",
+			"slices",
+			"append",
+			"switch",
+			"slice",
+			"interface",
+			"slice",
+			"and",
+			"f9",
+			"\")\n",
+			"usr"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"d.F",
+			"d.F\n",
+			"())\n",
+			")\n",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/org.cny.cny4a.ts/main/main.go",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 129,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								129,
+								129
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GoSublime/syntax/GoSublime-Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "OnCmd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 115,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								76,
+								76
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/org.cny.cny4a.ts/tdl/tdl.go",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1963,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1907,
+								1907
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/GoSublime/syntax/GoSublime-Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 513.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.9o:///Users/cny/git/Centny/Cny4a/TServer":
+	{
+		"height": 0.0
+	},
+	"output.9o:///Users/cny/git/Centny/Cny4a/TServer/src/org.cny.cny4a.ts/main":
+	{
+		"height": 100.0
+	},
+	"output.9o:///Users/cny/git/Centny/Cny4a/TServer/src/org.cny.cny4a.ts/tdl":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "TServer.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"org.centny.test/tsync/tsync.go"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+		],
+		"width": 392.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

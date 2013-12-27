@@ -1,0 +1,3 @@
+#!/bin/bash
+export GOPATH=`pwd`:$GOPATH
+go build -o TServer org.cny.cny4a.ts/main
