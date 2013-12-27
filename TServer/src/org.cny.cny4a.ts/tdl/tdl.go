@@ -22,7 +22,7 @@ func hdl_n(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func tran_f(w http.ResponseWriter, r *http.Request, sw int) {
-	fpath := "../../../data/www.pdf"
+	fpath := "data/www.pdf"
 	f, err := os.Open(fpath)
 	if err != nil {
 		w.Write([]byte("error:" + err.Error()))
