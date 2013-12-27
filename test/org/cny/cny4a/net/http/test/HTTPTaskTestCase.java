@@ -124,11 +124,11 @@ public class HTTPTaskTestCase extends
 		assertTrue(new File(this.dl, "测试.dat").delete());
 	}
 
-	public void testDoGetDown3() throws Throwable {
-		for (int i = 1; i < 5; i++) {
-			testDl(i);
-		}
-	}
+//	public void testDoGetDown3() throws Throwable {
+//		for (int i = 1; i < 5; i++) {
+//			testDl(i);
+//		}
+//	}
 
 	private void testDl(final int sw) throws Throwable {
 		final CountDownLatch cdl = new CountDownLatch(1);

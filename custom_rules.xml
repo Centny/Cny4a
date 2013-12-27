@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="custom_rules" default="stop_ts">
+	<property name="app.package" value="org.cny.cny4a" />
 	<target name="start_ts">
 		<exec executable="/bin/bash" dir="./TServer" failonerror="true">
 			<arg value="-xe" />
@@ -16,6 +17,15 @@
 			<arg value="-xe" />
 			<arg value="run_srv" />
 			<arg value="stop" />
+		</exec>
+	</target>
+	<target name="fetch-test-report">
+		<echo>Downloading XML test report...</echo>
+		<exec executable="${adb}" failonerror="true">
+			<arg line="${adb.device.arg}" />
+			<arg value="pull" />
+			<arg value="/data/data/${app.package}/files/junit-report.xml" />
+			<arg value="bin/junit-report.xml" />
 		</exec>
 	</target>
 </project>
