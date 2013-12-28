@@ -79,6 +79,5 @@
 				<include name="*/**" />
 			</fileset>
 		</jar>
-		<delete dir="${lib.dir}/${lib.name}" />
 	</target>
 </project>
