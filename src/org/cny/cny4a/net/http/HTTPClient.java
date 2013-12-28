@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -19,6 +18,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.os.AsyncTask;
 
+/**
+ * 
+ * @author cny
+ * 
+ */
 public abstract class HTTPClient extends
 		AsyncTask<HTTPClient, Float, HTTPClient> {
 
@@ -57,12 +61,16 @@ public abstract class HTTPClient extends
 			throw new InvalidParameterException("the callback is null");
 		}
 		this.setUrl(url);
-		this.cback = cback;
+		this.setCback(cback);
 	}
 
 	public HTTPClient setUrl(String url) {
 		this.url = url;
 		return this;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 
 	public List<BasicNameValuePair> getArgs() {
@@ -71,10 +79,6 @@ public abstract class HTTPClient extends
 
 	public List<BasicNameValuePair> getHeaders() {
 		return headers;
-	}
-
-	public String getUrl() {
-		return url;
 	}
 
 	public HTTPClient addArgs(String key, String val) {
@@ -87,26 +91,54 @@ public abstract class HTTPClient extends
 		return this;
 	}
 
+	public HTTPCallback getCback() {
+		return cback;
+	}
+
+	public void setCback(HTTPCallback cback) {
+		this.cback = cback;
+	}
+
+	public HttpClient getClient() {
+		return client;
+	}
+
+	public void setClient(HttpClient client) {
+		this.client = client;
+	}
+
+	public Throwable getError() {
+		return error;
+	}
+
+	public HTTPResponse getResponse() {
+		return response;
+	}
+
+	public HttpUriRequest getRequest() {
+		return request;
+	}
+
+	public String getRencoding() {
+		return rencoding;
+	}
+
+	public void setRencoding(String rencoding) {
+		this.rencoding = rencoding;
+	}
+
 	private void exec() {
 		try {
-			this.request = this.createRequest();
+			this.request = this.createRequest(this);
+			if (this.request == null) {
+				throw new Exception("the request is null");
+			}
 			this.cback.onRequest(this, this.request);
 			this.response = new HTTPResponse(this.client.execute(request));
 			OutputStream out = null;
-			switch (this.response.getStatusCode()) {
-			case HttpStatus.SC_OK:
-				out = this.cback.onBebin(this, this.response, false);
-				break;
-			case HttpStatus.SC_PARTIAL_CONTENT:
-				out = this.cback.onBebin(this, this.response, true);
-				break;
-			default:
-				this.error = new Exception("error response:"
-						+ this.response.getStatusCode());
-				break;
-			}
+			out = this.cback.onBebin(this, this.response);
 			if (out == null) {
-				return;
+				throw new Exception("the OutputStream is null");
 			}
 			HttpEntity entity = response.getReponse().getEntity();
 			InputStream is;
@@ -143,7 +175,7 @@ public abstract class HTTPClient extends
 		}
 	}
 
-	public abstract HttpUriRequest createRequest();
+	public abstract HttpUriRequest createRequest(HTTPClient c) throws Exception;
 
 	public static class HTTPMClient extends HTTPClient {
 		private String method = "GET";
@@ -157,7 +189,7 @@ public abstract class HTTPClient extends
 			return this;
 		}
 
-		public HttpUriRequest createRequest() {
+		public HttpUriRequest createRequest(HTTPClient c) throws Exception {
 			if ("GET".equals(method)) {
 				String params = URLEncodedUtils.format(this.args,
 						this.rencoding);
@@ -177,9 +209,8 @@ public abstract class HTTPClient extends
 				return get;
 			} else if ("POST".equals(method)) {
 				HttpPost post = new HttpPost(this.url);
-				for (NameValuePair nvp : this.args) {
-					post.addHeader(nvp.getName(), nvp.getValue());
-				}
+				post.setEntity(new UrlEncodedFormEntity(this.args, c
+						.getRencoding()));
 				for (BasicNameValuePair nv : this.headers) {
 					post.addHeader(nv.getName(), nv.getValue());
 				}

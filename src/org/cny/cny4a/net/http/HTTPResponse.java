@@ -13,16 +13,28 @@ public class HTTPResponse {
 	private HttpResponse reponse;
 	private long contentLength;
 	private String contentType;
-	private String encoding;
+	private String encoding = "UTF-8";
 	private int statusCode;
 	private String filename;
 	private Map<String, String> headers = new HashMap<String, String>();
 
 	public HTTPResponse(HttpResponse reponse) {
+		this.init(reponse, "UTF-8");
+	}
+
+	public HTTPResponse(HttpResponse reponse, String encoding) {
+		this.init(reponse, encoding);
+	}
+
+	private void init(HttpResponse reponse, String encoding) {
 		if (reponse == null) {
 			throw new RuntimeException("response is null");
 		}
+		if (encoding == null) {
+			throw new RuntimeException("encoding is null");
+		}
 		this.reponse = reponse;
+		this.encoding = encoding;
 		this.statusCode = this.reponse.getStatusLine().getStatusCode();
 		Header h;
 		h = this.reponse.getFirstHeader("Content-Length");
@@ -50,24 +62,25 @@ public class HTTPResponse {
 			HeaderElement he = h.getElements()[0];
 			NameValuePair cnv = he.getParameterByName("filename");
 			if (cnv != null) {
-				this.filename = cnv.getValue();
-				try {
-					this.filename = new String(
-							this.filename.getBytes("ISO-8859-1"), "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+				this.filename = toUtf8(cnv.getValue());
 			}
 		}
 		for (Header hd : this.reponse.getAllHeaders()) {
-			try {
-				byte[] bys = hd.getValue().getBytes("ISO-8859-1");
-				this.headers.put(hd.getName(), new String(bys, "UTF-8"));
-			} catch (RuntimeException e) {
-			} catch (UnsupportedEncodingException e) {
+			String cval = toUtf8(hd.getValue());
+			if (cval == null) {
+				continue;
 			}
+			this.headers.put(hd.getName(), cval);
 		}
 
+	}
+
+	private String toUtf8(String data) {
+		try {
+			return new String(data.getBytes("ISO-8859-1"), this.encoding);
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 
 	public HttpResponse getReponse() {

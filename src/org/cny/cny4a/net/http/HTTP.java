@@ -4,7 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
@@ -67,11 +66,12 @@ public class HTTP {
 	public abstract static class HTTPMCallback implements HTTPCallback {
 		private ByteArrayOutputStream out = new ByteArrayOutputStream();
 		private HTTPClient c;
-		protected String bencoding = "UTF-8";
+		protected String bencoding;
 
 		@Override
-		public OutputStream onBebin(HTTPClient c, HTTPResponse r, boolean append) {
+		public OutputStream onBebin(HTTPClient c, HTTPResponse r) {
 			this.c = c;
+			this.bencoding = r.getEncoding();
 			return out;
 		}
 
@@ -157,7 +157,7 @@ public class HTTP {
 		}
 
 		@Override
-		public OutputStream onBebin(HTTPClient c, HTTPResponse r, boolean append)
+		public OutputStream onBebin(HTTPClient c, HTTPResponse r)
 				throws Exception {
 			this.fos = new FileOutputStream(this.filepath, false);
 			return new BufferedOutputStream(this.fos);
@@ -175,16 +175,18 @@ public class HTTP {
 
 		@Override
 		public void onSuccess(HTTPClient c) {
-
+			try {
+				this.fos.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		@Override
 		public void onError(HTTPClient c, Throwable err) {
 			try {
-				if (this.fos != null) {
-					this.fos.close();
-				}
-			} catch (IOException e) {
+				this.fos.close();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -214,7 +216,7 @@ public class HTTP {
 		}
 
 		@Override
-		public OutputStream onBebin(HTTPClient c, HTTPResponse r, boolean append)
+		public OutputStream onBebin(HTTPClient c, HTTPResponse r)
 				throws Exception {
 			this.fname = r.getFilename();
 			if (this.fname == null && this.defaultName != null) {
@@ -225,7 +227,7 @@ public class HTTP {
 			}
 			File f = new File(this.sdir, this.fname);
 			this.setFilepath(f.getAbsolutePath());
-			return super.onBebin(c, r, append);
+			return super.onBebin(c, r);
 		}
 
 		private String getUrlName(HTTPClient c) {
@@ -253,10 +255,6 @@ public class HTTP {
 
 		public String getFname() {
 			return fname;
-		}
-
-		public void setFname(String fname) {
-			this.fname = fname;
 		}
 
 	}
