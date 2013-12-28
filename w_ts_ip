@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ "Darwin" = `uname` ];then
+ addr en0>assets/ts_ip.dat
+else
+ addr>assets/ts_ip.dat
+fi

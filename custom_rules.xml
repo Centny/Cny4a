@@ -31,4 +31,14 @@
 			<arg value="bin/junit-report.xml" />
 		</exec>
 	</target>
+	<target name="w_ts_ip">
+		<exec executable="/bin/bash" dir="." failonerror="true">
+			<arg value="-xe" />
+			<arg value="addr" />
+			<arg value="stop" />
+		</exec>
+		<exec executable="killall" dir="./TServer" failonerror="false">
+			<arg value="TServer" />
+		</exec>
+	</target>
 </project>
