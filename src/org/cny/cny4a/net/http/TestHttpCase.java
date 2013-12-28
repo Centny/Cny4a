@@ -1,23 +1,20 @@
-package org.cny.cny4a.net.http.test;
+package org.cny.cny4a.net.http;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.concurrent.CountDownLatch;
 
-import org.cny.cny4a.net.http.HTTP;
 import org.cny.cny4a.net.http.HTTP.HTTPDownCallback;
-import org.cny.cny4a.net.http.HTTP.HTTPNameDlCallback;
-import org.cny.cny4a.net.http.HTTPClient;
 import org.cny.cny4a.test.MainActivity;
 
 import android.os.Environment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-public class HTTPTaskTestCase extends
+public class TestHttpCase extends
 		ActivityInstrumentationTestCase2<MainActivity> {
-	public HTTPTaskTestCase() {
+	public TestHttpCase() {
 		super(MainActivity.class);
 	}
 
@@ -94,35 +91,35 @@ public class HTTPTaskTestCase extends
 		assertTrue(new File(this.dl, "www.txt").delete());
 	}
 
-	public void testDoGetDown2() throws Throwable {
-		final CountDownLatch cdl = new CountDownLatch(1);
-		this.runTestOnUiThread(new Runnable() {
-
-			@Override
-			public void run() {
-				HTTP.doGetDown("http://192.168.1.10/测试.dat",
-						new HTTPNameDlCallback(dl.getAbsolutePath()) {
-
-							@Override
-							public void onSuccess(HTTPClient c) {
-								super.onSuccess(c);
-								cdl.countDown();
-							}
-
-							@Override
-							public void onError(HTTPClient c, Throwable err) {
-								super.onError(c, err);
-								cdl.countDown();
-							}
-
-						});
-			}
-		});
-		cdl.await();
-		File p = new File(this.dl, "测试.dat");
-		assertTrue(p.exists());
-		assertTrue(new File(this.dl, "测试.dat").delete());
-	}
+//	public void testDoGetDown2() throws Throwable {
+//		final CountDownLatch cdl = new CountDownLatch(1);
+//		this.runTestOnUiThread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				HTTP.doGetDown("http://192.168.1.10/测试.dat",
+//						new HTTPNameDlCallback(dl.getAbsolutePath()) {
+//
+//							@Override
+//							public void onSuccess(HTTPClient c) {
+//								super.onSuccess(c);
+//								cdl.countDown();
+//							}
+//
+//							@Override
+//							public void onError(HTTPClient c, Throwable err) {
+//								super.onError(c, err);
+//								cdl.countDown();
+//							}
+//
+//						});
+//			}
+//		});
+//		cdl.await();
+//		File p = new File(this.dl, "测试.dat");
+//		assertTrue(p.exists());
+//		assertTrue(new File(this.dl, "测试.dat").delete());
+//	}
 
 //	public void testDoGetDown3() throws Throwable {
 //		for (int i = 1; i < 5; i++) {

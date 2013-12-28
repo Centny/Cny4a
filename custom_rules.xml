@@ -18,6 +18,9 @@
 			<arg value="run_srv" />
 			<arg value="stop" />
 		</exec>
+		<exec executable="killall" dir="./TServer" failonerror="false">
+			<arg value="TServer" />
+		</exec>
 	</target>
 	<target name="fetch-test-report">
 		<echo>Downloading XML test report...</echo>
