@@ -19,6 +19,9 @@ import org.apache.http.message.BasicNameValuePair;
 import android.os.AsyncTask;
 
 /**
+ * the main class for GET/POST.<br/>
+ * it implement default the common method for request the server by GET/POST
+ * using AsyncTask.
  * 
  * @author cny
  * 
@@ -34,7 +37,11 @@ public abstract class HTTPClient extends
 
 	@Override
 	protected void onPostExecute(HTTPClient result) {
-		result.onPostExecute();
+		if (this.error == null) {
+			this.cback.onSuccess(this);
+		} else {
+			this.cback.onError(this, this.error);
+		}
 	}
 
 	@Override
@@ -53,6 +60,14 @@ public abstract class HTTPClient extends
 	protected HttpUriRequest request;
 	protected HTTPCallback cback;
 
+	/**
+	 * default constructor by URL and HTTPCallback.
+	 * 
+	 * @param url
+	 *            the target URL.
+	 * @param cback
+	 *            the HTTPCallback instance.
+	 */
 	public HTTPClient(String url, HTTPCallback cback) {
 		if (url == null || url.trim().length() < 1) {
 			throw new InvalidParameterException("url is null or empty");
@@ -64,72 +79,160 @@ public abstract class HTTPClient extends
 		this.setCback(cback);
 	}
 
+	/**
+	 * Set the URL.
+	 * 
+	 * @param url
+	 *            the URL.
+	 * @return the HTTPClient instance.
+	 */
 	public HTTPClient setUrl(String url) {
 		this.url = url;
 		return this;
 	}
 
+	/**
+	 * Get the URL.
+	 * 
+	 * @return the URL.
+	 */
 	public String getUrl() {
 		return url;
 	}
 
+	/**
+	 * Get the request arguments.
+	 * 
+	 * @return the arguments.
+	 */
 	public List<BasicNameValuePair> getArgs() {
 		return args;
 	}
 
+	/**
+	 * Get the request headers.
+	 * 
+	 * @return the headers.
+	 */
 	public List<BasicNameValuePair> getHeaders() {
 		return headers;
 	}
 
+	/**
+	 * Add one request arguments.
+	 * 
+	 * @param key
+	 *            the key.
+	 * @param val
+	 *            the value.
+	 * @return the HTTPClient instance.
+	 */
 	public HTTPClient addArgs(String key, String val) {
 		this.args.add(new BasicNameValuePair(key, val));
 		return this;
 	}
 
+	/**
+	 * Add on request header.
+	 * 
+	 * @param key
+	 *            the key
+	 * @param val
+	 *            the value.
+	 * @return the HTTPClient instance.
+	 */
 	public HTTPClient addHeader(String key, String val) {
 		this.headers.add(new BasicNameValuePair(key, val));
 		return this;
 	}
 
+	/**
+	 * Get HTTPCallback.
+	 * 
+	 * @return the HTTPCallback.
+	 */
 	public HTTPCallback getCback() {
 		return cback;
 	}
 
+	/**
+	 * Set HTTPCallback.
+	 * 
+	 * @param cback
+	 *            the HTTPCallback.
+	 */
 	public void setCback(HTTPCallback cback) {
 		this.cback = cback;
 	}
 
+	/**
+	 * Get the HttpClient instance.
+	 * 
+	 * @return the HttpClient.
+	 */
 	public HttpClient getClient() {
 		return client;
 	}
 
+	/**
+	 * Set the HttpClient instance.
+	 * 
+	 * @param client
+	 *            the HttpClient.
+	 */
 	public void setClient(HttpClient client) {
 		this.client = client;
 	}
 
+	/**
+	 * Get the error instance.
+	 * 
+	 * @return the error instance.
+	 */
 	public Throwable getError() {
 		return error;
 	}
 
+	/**
+	 * Get the HTTP response.
+	 * 
+	 * @return the HTTPResponse.
+	 */
 	public HTTPResponse getResponse() {
 		return response;
 	}
 
+	/**
+	 * Get the HTTP request.
+	 * 
+	 * @return the HTTP request.
+	 */
 	public HttpUriRequest getRequest() {
 		return request;
 	}
 
+	/**
+	 * Get the request encoding.
+	 * 
+	 * @return the encoding.
+	 */
 	public String getRencoding() {
 		return rencoding;
 	}
 
+	/**
+	 * Set the request encoding.
+	 * 
+	 * @param rencoding
+	 *            the encoding.
+	 */
 	public void setRencoding(String rencoding) {
 		this.rencoding = rencoding;
 	}
 
 	private void exec() {
 		try {
-			this.request = this.createRequest(this);
+			this.request = this.createRequest();
 			if (this.request == null) {
 				throw new Exception("the request is null");
 			}
@@ -159,6 +262,14 @@ public abstract class HTTPClient extends
 		}
 	}
 
+	/**
+	 * call it when transfer process.
+	 * 
+	 * @param rsize
+	 *            the data size already read.
+	 * @param clen
+	 *            the Content-Length.
+	 */
 	protected void onProcess(long rsize, long clen) {
 		if (clen > 0) {
 			this.publishProgress((float) (((double) rsize) / ((double) clen)));
@@ -167,29 +278,50 @@ public abstract class HTTPClient extends
 		}
 	}
 
-	public void onPostExecute() {
-		if (this.error == null) {
-			this.cback.onSuccess(this);
-		} else {
-			this.cback.onError(this, this.error);
-		}
-	}
+	/**
+	 * Create HttpUriRequest instance.
+	 * 
+	 * @return the HttpUriRequest instance.
+	 * @throws Exception
+	 *             throw exception.
+	 */
+	public abstract HttpUriRequest createRequest() throws Exception;
 
-	public abstract HttpUriRequest createRequest(HTTPClient c) throws Exception;
-
+	/**
+	 * the normal HTTP client extends HTTPClient for GET/POST.
+	 * 
+	 * @author cny
+	 * 
+	 */
 	public static class HTTPMClient extends HTTPClient {
 		private String method = "GET";
 
+		/**
+		 * default constructor by URL and call back.
+		 * 
+		 * @param url
+		 *            the URL.
+		 * @param cback
+		 *            the HTTPCallback.
+		 */
 		public HTTPMClient(String url, HTTPCallback cback) {
 			super(url, cback);
 		}
 
+		/**
+		 * Set the request method,default GET.
+		 * 
+		 * @param method
+		 *            the target method.
+		 * @return the HTTPMClient instance.
+		 */
 		public HTTPMClient setMethod(String method) {
 			this.method = method;
 			return this;
 		}
 
-		public HttpUriRequest createRequest(HTTPClient c) throws Exception {
+		@Override
+		public HttpUriRequest createRequest() throws Exception {
 			if ("GET".equals(method)) {
 				String params = URLEncodedUtils.format(this.args,
 						this.rencoding);
@@ -209,7 +341,7 @@ public abstract class HTTPClient extends
 				return get;
 			} else if ("POST".equals(method)) {
 				HttpPost post = new HttpPost(this.url);
-				post.setEntity(new UrlEncodedFormEntity(this.args, c
+				post.setEntity(new UrlEncodedFormEntity(this.args, this
 						.getRencoding()));
 				for (BasicNameValuePair nv : this.headers) {
 					post.addHeader(nv.getName(), nv.getValue());

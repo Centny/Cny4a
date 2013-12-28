@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="custom_rules" default="stop_ts">
-	<property name="app.package" value="org.cny.cny4a" />
+	<property file="ant.properties" />
+	<property file="project.properties" />
+	<property name="lib.name" value="libcny4a-${jar.ver}" />
+	<property name="lib.dir" value="bin/libcny4a" />
 	<target name="start_ts">
 		<exec executable="/bin/bash" dir="./TServer" failonerror="true">
 			<arg value="-xe" />
@@ -40,5 +43,42 @@
 		<exec executable="killall" dir="./TServer" failonerror="false">
 			<arg value="TServer" />
 		</exec>
+	</target>
+	<target name="-post-compile">
+		<antcall target="pub.jar" />
+		<antcall target="pub.doc" />
+	</target>
+	<target name="pub.jar">
+		<copy todir="bin/classes">
+			<fileset dir="src">
+				<exclude name="org/cny/cny4a/net/http/Test*" />
+				<include name="org/cny/cny4a/net/http/*" />
+			</fileset>
+		</copy>
+		<jar destfile="${lib.dir}/${lib.name}.jar">
+			<fileset dir="bin/classes">
+				<exclude name="org/cny/cny4a/net/http/Test*" />
+				<include name="org/cny/cny4a/net/http/*" />
+			</fileset>
+		</jar>
+	</target>
+	<target name="pub.doc">
+		<javadoc destdir="${lib.dir}/${lib.name}" windowtitle="Cny4a Project Class Library" use="yes" linksource="no" splitindex="yes" encoding="UTF-8" docencoding="UTF-8">
+			<classpath>
+				<fileset dir="${sdk.dir}/platforms/${target}">
+					<include name="*.jar" />
+				</fileset>
+				<path path="./bin/classes" />
+			</classpath>
+			<packageset dir="src" defaultexcludes="yes">
+				<include name="org/cny/cny4a/net/**" />
+			</packageset>
+		</javadoc>
+		<jar destfile="${lib.dir}/${lib.name}.doc.zip">
+			<fileset dir="${lib.dir}/${lib.name}">
+				<include name="*/**" />
+			</fileset>
+		</jar>
+		<delete dir="${lib.dir}/${lib.name}" />
 	</target>
 </project>
