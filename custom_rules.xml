@@ -80,4 +80,13 @@
 			</fileset>
 		</jar>
 	</target>
+	<target name="pub.pkg">
+		<echo>copy file to publish</echo>
+		<copy todir="./publish" failonerror="true" overwrite="false" >
+			<fileset dir="${lib.dir}">
+				<include name="*.zip" />
+				<include name="*.jar" />
+			</fileset>
+		</copy>
+	</target>
 </project>
