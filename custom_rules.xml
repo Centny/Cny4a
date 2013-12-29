@@ -4,6 +4,7 @@
 	<property file="project.properties" />
 	<property name="lib.name" value="libcny4a-${jar.ver}" />
 	<property name="lib.dir" value="bin/libcny4a" />
+	<property name="lib.cls" value="bin/pub.cls" />
 	<target name="start_ts">
 		<exec executable="/bin/bash" dir="./TServer" failonerror="true">
 			<arg value="-xe" />
@@ -44,31 +45,39 @@
 			<arg value="TServer" />
 		</exec>
 	</target>
-	<target name="-post-compile">
-		<antcall target="pub.jar" />
-		<antcall target="pub.doc" />
-	</target>
 	<target name="pub.jar">
-		<copy todir="bin/classes">
+		<delete dir="${lib.cls}" />
+		<mkdir dir="${lib.cls}" />
+		<javac encoding="UTF-8" destdir="${lib.cls}" includeantruntime="false">
+			<classpath>
+				<fileset dir="${sdk.dir}/platforms/${target}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="libs">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+			<src path="src" />
+			<src path="gen" />
+		</javac>
+		<copy todir="${lib.cls}">
 			<fileset dir="src">
 				<exclude name="org/cny/cny4a/net/http/Test*" />
 				<include name="org/cny/cny4a/net/http/*" />
 			</fileset>
 		</copy>
 		<jar destfile="${lib.dir}/${lib.name}.jar">
-			<fileset dir="bin/classes">
+			<fileset dir="${lib.cls}">
 				<exclude name="org/cny/cny4a/net/http/Test*" />
 				<include name="org/cny/cny4a/net/http/*" />
 			</fileset>
 		</jar>
-	</target>
-	<target name="pub.doc">
 		<javadoc destdir="${lib.dir}/${lib.name}" windowtitle="Cny4a Project Class Library" use="yes" linksource="no" splitindex="yes" encoding="UTF-8" docencoding="UTF-8">
 			<classpath>
 				<fileset dir="${sdk.dir}/platforms/${target}">
 					<include name="*.jar" />
 				</fileset>
-				<path path="./bin/classes" />
+				<path path="${lib.cls}" />
 			</classpath>
 			<packageset dir="src" defaultexcludes="yes">
 				<include name="org/cny/cny4a/net/**" />
@@ -80,9 +89,10 @@
 			</fileset>
 		</jar>
 	</target>
+
 	<target name="pub.pkg">
 		<echo>copy file to publish</echo>
-		<copy todir="./publish" failonerror="true" overwrite="false" >
+		<copy todir="./publish" failonerror="true" overwrite="false">
 			<fileset dir="${lib.dir}">
 				<include name="*.zip" />
 				<include name="*.jar" />
