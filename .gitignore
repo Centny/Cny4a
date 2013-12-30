@@ -13,3 +13,5 @@ gen
 TServer/ts.lock
 
 assets/ts_ip.dat
+
+build

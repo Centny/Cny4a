@@ -14,7 +14,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.cny.cny4a.net.http.HTTP.HTTPDownCallback;
 import org.cny.cny4a.net.http.HTTP.HTTPNameDlCallback;
-import org.cny.cny4a.net.http.HTTPClient.HTTPMClient;
 import org.cny.cny4a.test.MainActivity;
 
 import android.os.Environment;
@@ -48,94 +47,118 @@ public class TestHttpCase extends
 		}
 	}
 
+	public class Abc extends HTTP.HTTPMCallback {
+		private CountDownLatch cdl;
+		private String name;
+
+		public Abc(CountDownLatch cdl, String name) {
+			super();
+			this.cdl = cdl;
+			this.name = name;
+		}
+
+		@Override
+		public void onError(HTTPClient c, Throwable err) {
+			cdl.countDown();
+			rerr = err;
+		}
+
+		@Override
+		public void onSuccess(HTTPClient c, String data) {
+			cdl.countDown();
+			if (c.getClient() == null) {
+				rerr = new Exception("client is null");
+				return;
+			}
+			if (c.getRequest() == null) {
+				rerr = new Exception("rquest is null");
+				return;
+			}
+			if (c.getError() != null) {
+				rerr = new Exception("response:" + c.getError().getMessage());
+				return;
+			}
+			if (c.getResponse().getStatusCode() != 200) {
+				rerr = new Exception("response code:"
+						+ c.getResponse().getStatusCode());
+				return;
+			}
+			if (c.getCback() != this) {
+				rerr = new Exception("call back error");
+				return;
+			}
+			System.out.println(c.getRencoding());
+			if (!"OK".equals(data)) {
+				String msg = "response:" + data + "," + this.name;
+				if (rerr != null) {
+					msg = rerr.getMessage() + ",," + msg;
+				}
+				rerr = new Exception(msg);
+				return;
+			}
+		}
+	};
+
 	public void testDoGet() throws Throwable {
 		this.rerr = null;
-		final CountDownLatch cdl = new CountDownLatch(1);
-		final HTTPCallback cback = new HTTP.HTTPMCallback() {
-
-			@Override
-			public void onError(HTTPClient c, Throwable err) {
-				cdl.countDown();
-				rerr = err;
-			}
-
-			@Override
-			public void onSuccess(HTTPClient c, String data) {
-				cdl.countDown();
-				if (c.getClient() == null) {
-					rerr = new Exception("client is null");
-					return;
-				}
-				if (c.getRequest() == null) {
-					rerr = new Exception("rquest is null");
-					return;
-				}
-				if (c.getError() != null) {
-					rerr = new Exception("response:"
-							+ c.getError().getMessage());
-					return;
-				}
-				if (c.getResponse().getStatusCode() != 200) {
-					rerr = new Exception("response code:"
-							+ c.getResponse().getStatusCode());
-					return;
-				}
-				if (c.getCback() != this) {
-					rerr = new Exception("call back error");
-					return;
-				}
-				System.out.println(c.getRencoding());
-				if (!"OK".equals(data)) {
-					rerr = new Exception("response:" + data);
-					return;
-				}
-			}
-		};
+		final CountDownLatch cdl = new CountDownLatch(9);
 		this.runTestOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
+				// 1
 				HTTP.doGet("http://" + ts_ip + ":8000/g_args?a=1&b=abc&c=这是中文",
-						cback);
+						new Abc(cdl, "1"));
 				List<BasicNameValuePair> args = new ArrayList<BasicNameValuePair>();
 				args.add(new BasicNameValuePair("a", "1"));
+				// 2
 				HTTP.doGet("http://" + ts_ip + ":8000/g_args?b=abc&c=这是中文",
-						args, cback);
+						args, new Abc(cdl, "2"));
 				args.add(new BasicNameValuePair("b", "abc"));
+				// 3
 				HTTP.doGet("http://" + ts_ip + ":8000/g_args?c=这是中文", args,
-						cback);
+						new Abc(cdl, "3"));
 				args.add(new BasicNameValuePair("c", "这是中文"));
-				HTTP.doGet("http://" + ts_ip + ":8000/g_args", args, cback);
+				// 4
+				HTTP.doGet("http://" + ts_ip + ":8000/g_args", args, new Abc(
+						cdl, "4"));
+				// 5
 				HTTP.doPost("http://" + ts_ip + ":8000/g_args?c=这是中文", args,
-						cback);
+						new Abc(cdl, "5"));
 				//
-				HTTPMClient dc;
-				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/g_args", cback);
+				HTTPAsyncTask dc;
+				// 6
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/g_args",
+						new Abc(cdl, "6"));
 				dc.addArgs("a", "1");
 				dc.addArgs("b", "abc");
 				dc.addArgs("c", "这是中文");
 				dc.setMethod("GET");
-				dc.execute(dc);
-				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/h_args", cback);
+				dc.asyncExec();
+				// 7
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/h_args",
+						new Abc(cdl, "7"));
 				dc.getHeaders().addAll(args);
 				dc.setMethod("GET");
-				dc.execute(dc);
-				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/h_args", cback);
+				dc.asyncExec();
+				// 8
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/h_args",
+						new Abc(cdl, "8"));
 				dc.getHeaders().addAll(args);
 				dc.setMethod("POST");
 				dc.setClient(new DefaultHttpClient());
 				dc.setRencoding("UTF-8");
-				dc.execute(dc);
-				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/h_args", cback);
+				dc.asyncExec();
+				// 9
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/h_args",
+						new Abc(cdl, "9"));
 				dc.addHeader("a", "1");
 				dc.addHeader("b", "abc");
 				dc.addHeader("c", "这是中文");
 				dc.setMethod("POST");
-				dc.execute(dc);
+				dc.setClient(new DefaultHttpClient());
+				dc.setRencoding("UTF-8");
+				dc.asyncExec();
 			}
 		});
 		cdl.await();
@@ -165,11 +188,12 @@ public class TestHttpCase extends
 
 			@Override
 			public void run() {
-				HTTPMClient dc;
+				HTTPAsyncTask dc;
 				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/g_args", eback);
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/g_args",
+						eback);
 				dc.setMethod("NO SUPPPORTED");
-				dc.execute(dc);
+				dc.asyncExec();
 			}
 		});
 		cdl.await();
@@ -180,12 +204,12 @@ public class TestHttpCase extends
 
 	public void testNewError() {
 		try {
-			new HTTPMClient(null, null);
+			new HTTPAsyncTask(null, null);
 		} catch (RuntimeException e) {
 
 		}
 		try {
-			new HTTPMClient("http://" + ts_ip + ":8000/g_args", null);
+			new HTTPAsyncTask("http://" + ts_ip + ":8000/g_args", null);
 		} catch (RuntimeException e) {
 
 		}
@@ -217,11 +241,12 @@ public class TestHttpCase extends
 
 			@Override
 			public void run() {
-				HTTPMClient dc;
+				HTTPAsyncTask dc;
 				//
-				dc = new HTTPMClient("http://" + ts_ip + ":8000/g_args", eback);
+				dc = new HTTPAsyncTask("http://" + ts_ip + ":8000/g_args",
+						eback);
 				dc.setMethod("GET");
-				dc.execute(dc);
+				dc.asyncExec();
 			}
 		});
 		cdl.await();
@@ -538,5 +563,17 @@ public class TestHttpCase extends
 		File p = new File(this.dl, "测试.pdf");
 		assertTrue(p.exists());
 		assertTrue(new File(this.dl, "测试.pdf").delete());
+	}
+
+	public void testBufferSize() {
+		HTTPClient hc = new HTTPRunnable("http://www.baidu.com",
+				new HTTP.HTTPDownCallback());
+		hc.setBsize(1024000);
+		System.out.println(hc.getBsize());
+		try {
+			hc.setBsize(100);
+		} catch (Exception e) {
+
+		}
 	}
 }

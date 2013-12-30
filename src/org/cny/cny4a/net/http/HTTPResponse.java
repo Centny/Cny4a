@@ -9,6 +9,12 @@ import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 
+/**
+ * the external class for HTTP response.
+ * 
+ * @author cny
+ * 
+ */
 public class HTTPResponse {
 	private HttpResponse reponse;
 	private long contentLength;
@@ -18,10 +24,24 @@ public class HTTPResponse {
 	private String filename;
 	private Map<String, String> headers = new HashMap<String, String>();
 
+	/**
+	 * the constructor by HttpResponse.
+	 * 
+	 * @param reponse
+	 *            the HttpResponse.
+	 */
 	public HTTPResponse(HttpResponse reponse) {
 		this.init(reponse, "UTF-8");
 	}
 
+	/**
+	 * the constructor by HttpResponse and encoding.
+	 * 
+	 * @param reponse
+	 *            the HttpResponse.
+	 * @param encoding
+	 *            the encoding.
+	 */
 	public HTTPResponse(HttpResponse reponse, String encoding) {
 		this.init(reponse, encoding);
 	}
@@ -83,30 +103,67 @@ public class HTTPResponse {
 		}
 	}
 
+	/**
+	 * Get HttpResponse.
+	 * 
+	 * @return the HttpResponse.
+	 */
 	public HttpResponse getReponse() {
 		return reponse;
 	}
 
+	/**
+	 * Get the content length.
+	 * 
+	 * @return the content length.
+	 */
 	public long getContentLength() {
 		return contentLength;
 	}
 
+	/**
+	 * Get the content type.
+	 * 
+	 * @return the content type.
+	 */
 	public String getContentType() {
 		return contentType;
 	}
 
+	/**
+	 * Get the encoding.
+	 * 
+	 * @return the encoding.
+	 */
 	public String getEncoding() {
 		return encoding;
 	}
 
+	/**
+	 * Get the status code.
+	 * 
+	 * @return the status code.
+	 */
 	public int getStatusCode() {
 		return statusCode;
 	}
 
+	/**
+	 * Get the file name.
+	 * 
+	 * @return the file name.
+	 */
 	public String getFilename() {
 		return filename;
 	}
 
+	/**
+	 * Get the header value by key.
+	 * 
+	 * @param key
+	 *            the key.
+	 * @return the header value.
+	 */
 	public String getValue(String key) {
 		return this.headers.get(key);
 	}

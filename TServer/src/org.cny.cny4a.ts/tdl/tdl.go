@@ -60,7 +60,17 @@ func hdl_ps(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write([]byte("OK"))
 }
+func toUtf8(iso8859_1_buf []byte) string {
+	buf := make([]rune, len(iso8859_1_buf))
+	for i, b := range iso8859_1_buf {
+		buf[i] = rune(b)
+	}
+	return string(buf)
+}
 func hdl_hs(w http.ResponseWriter, r *http.Request) {
+	for k, v := range r.Header {
+		fmt.Println(k, v)
+	}
 	var v string
 	v = r.Header.Get("a")
 	if len(v) > 1 {
@@ -74,6 +84,7 @@ func hdl_hs(w http.ResponseWriter, r *http.Request) {
 	}
 	v = r.Header.Get("c")
 	if v != "这是中文" {
+		fmt.Println(v)
 		w.Write([]byte("ERR"))
 		return
 	}

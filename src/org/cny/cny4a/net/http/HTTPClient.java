@@ -8,15 +8,9 @@ import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-import android.os.AsyncTask;
 
 /**
  * the main class for GET/POST.<br/>
@@ -26,29 +20,8 @@ import android.os.AsyncTask;
  * @author cny
  * 
  */
-public abstract class HTTPClient extends
-		AsyncTask<HTTPClient, Float, HTTPClient> {
-
-	@Override
-	protected HTTPClient doInBackground(HTTPClient... params) {
-		params[0].exec();
-		return params[0];
-	}
-
-	@Override
-	protected void onPostExecute(HTTPClient result) {
-		if (this.error == null) {
-			this.cback.onSuccess(this);
-		} else {
-			this.cback.onError(this, this.error);
-		}
-	}
-
-	@Override
-	protected void onProgressUpdate(Float... values) {
-		this.cback.onProcess(this, values[0]);
-	}
-
+public abstract class HTTPClient {
+	public static final int BUF_SIZE = 102400;
 	//
 	protected String url;
 	protected List<BasicNameValuePair> headers = new ArrayList<BasicNameValuePair>();
@@ -59,6 +32,7 @@ public abstract class HTTPClient extends
 	protected HTTPResponse response;
 	protected HttpUriRequest request;
 	protected HTTPCallback cback;
+	protected int bsize = BUF_SIZE;
 
 	/**
 	 * default constructor by URL and HTTPCallback.
@@ -230,7 +204,32 @@ public abstract class HTTPClient extends
 		this.rencoding = rencoding;
 	}
 
-	private void exec() {
+	/**
+	 * Get buffer size.
+	 * 
+	 * @return the buffer size.
+	 */
+	public int getBsize() {
+		return bsize;
+	}
+
+	/**
+	 * Set the buffer size.
+	 * 
+	 * @param bsize
+	 *            the buffer size.
+	 */
+	public void setBsize(int bsize) {
+		if (bsize < 1024) {
+			throw new RuntimeException("the buffer size less 1024");
+		}
+		this.bsize = bsize;
+	}
+
+	/**
+	 * execute the HTTP request.
+	 */
+	public void exec() {
 		try {
 			this.request = this.createRequest();
 			if (this.request == null) {
@@ -248,7 +247,7 @@ public abstract class HTTPClient extends
 			long rsize = 0;
 			long clen = this.response.getContentLength();
 			is = entity.getContent();
-			byte[] buf = new byte[4096];
+			byte[] buf = new byte[this.bsize];
 			int length = -1;
 			while ((length = is.read(buf)) != -1) {
 				out.write(buf, 0, length);
@@ -272,11 +271,13 @@ public abstract class HTTPClient extends
 	 */
 	protected void onProcess(long rsize, long clen) {
 		if (clen > 0) {
-			this.publishProgress((float) (((double) rsize) / ((double) clen)));
+			this.onProcess((float) (((double) rsize) / ((double) clen)));
 		} else {
-			this.publishProgress((float) 0);
+			this.onProcess((float) 0);
 		}
 	}
+
+	protected abstract void onProcess(float rate);
 
 	/**
 	 * Create HttpUriRequest instance.
@@ -287,69 +288,4 @@ public abstract class HTTPClient extends
 	 */
 	public abstract HttpUriRequest createRequest() throws Exception;
 
-	/**
-	 * the normal HTTP client extends HTTPClient for GET/POST.
-	 * 
-	 * @author cny
-	 * 
-	 */
-	public static class HTTPMClient extends HTTPClient {
-		private String method = "GET";
-
-		/**
-		 * default constructor by URL and call back.
-		 * 
-		 * @param url
-		 *            the URL.
-		 * @param cback
-		 *            the HTTPCallback.
-		 */
-		public HTTPMClient(String url, HTTPCallback cback) {
-			super(url, cback);
-		}
-
-		/**
-		 * Set the request method,default GET.
-		 * 
-		 * @param method
-		 *            the target method.
-		 * @return the HTTPMClient instance.
-		 */
-		public HTTPMClient setMethod(String method) {
-			this.method = method;
-			return this;
-		}
-
-		@Override
-		public HttpUriRequest createRequest() throws Exception {
-			if ("GET".equals(method)) {
-				String params = URLEncodedUtils.format(this.args,
-						this.rencoding);
-				HttpGet get;
-				if (params.length() > 0) {
-					if (this.url.indexOf("?") > 0) {
-						get = new HttpGet(this.url + "&" + params);
-					} else {
-						get = new HttpGet(this.url + "?" + params);
-					}
-				} else {
-					get = new HttpGet(this.url);
-				}
-				for (BasicNameValuePair nv : this.headers) {
-					get.addHeader(nv.getName(), nv.getValue());
-				}
-				return get;
-			} else if ("POST".equals(method)) {
-				HttpPost post = new HttpPost(this.url);
-				post.setEntity(new UrlEncodedFormEntity(this.args, this
-						.getRencoding()));
-				for (BasicNameValuePair nv : this.headers) {
-					post.addHeader(nv.getName(), nv.getValue());
-				}
-				return post;
-			} else {
-				return null;
-			}
-		}
-	}
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.message.BasicNameValuePair;
-import org.cny.cny4a.net.http.HTTPClient.HTTPMClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,12 +32,12 @@ public class HTTP {
 	 */
 	public static void doPost(String url, List<BasicNameValuePair> args,
 			HTTPCallback cb) {
-		HTTPMClient hc = new HTTPMClient(url, cb);
+		HTTPAsyncTask hc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			hc.getArgs().addAll(args);
 		}
 		hc.setMethod("POST");
-		hc.execute(hc);
+		hc.asyncExec();
 	}
 
 	/**
@@ -53,12 +52,12 @@ public class HTTP {
 	 */
 	public static void doGet(String url, List<BasicNameValuePair> args,
 			HTTPCallback cb) {
-		HTTPMClient hc = new HTTPMClient(url, cb);
+		HTTPAsyncTask hc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			hc.getArgs().addAll(args);
 		}
 		hc.setMethod("GET");
-		hc.execute(hc);
+		hc.asyncExec();
 	}
 
 	/**
@@ -85,12 +84,12 @@ public class HTTP {
 	 */
 	public static void doGetDown(String url, List<BasicNameValuePair> args,
 			HTTPDownCallback cb) {
-		HTTPMClient dc = new HTTPMClient(url, cb);
+		HTTPAsyncTask dc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			dc.getArgs().addAll(args);
 		}
 		dc.setMethod("GET");
-		dc.execute(dc);
+		dc.asyncExec();
 	}
 
 	/**
@@ -117,12 +116,12 @@ public class HTTP {
 	 */
 	public static void doPostDown(String url, List<BasicNameValuePair> args,
 			HTTPDownCallback cb) {
-		HTTPMClient dc = new HTTPMClient(url, cb);
+		HTTPAsyncTask dc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			dc.getArgs().addAll(args);
 		}
 		dc.setMethod("POST");
-		dc.execute(dc);
+		dc.asyncExec();
 	}
 
 	/**
@@ -140,6 +139,7 @@ public class HTTP {
 		public OutputStream onBebin(HTTPClient c, HTTPResponse r) {
 			this.c = c;
 			this.bencoding = r.getEncoding();
+			this.out.reset();
 			return out;
 		}
 
