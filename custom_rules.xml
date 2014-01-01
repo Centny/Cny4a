@@ -3,8 +3,8 @@
 	<property file="ant.properties" />
 	<property file="project.properties" />
 	<property name="lib.name" value="libcny4a-${jar.ver}" />
-	<property name="lib.dir" value="bin/libcny4a" />
-	<property name="lib.cls" value="bin/pub.cls" />
+	<property name="lib.dir" value="${out.dir}/libcny4a" />
+	<property name="lib.cls" value="${out.dir}/pub.cls" />
 	<target name="start_ts">
 		<exec executable="/bin/bash" dir="./TServer" failonerror="true">
 			<arg value="-xe" />
@@ -32,7 +32,7 @@
 			<arg line="${adb.device.arg}" />
 			<arg value="pull" />
 			<arg value="/data/data/${app.package}/files/junit-report.xml" />
-			<arg value="bin/junit-report.xml" />
+			<arg value="${out.dir}/junit-report.xml" />
 		</exec>
 	</target>
 	<target name="w_ts_ip">
