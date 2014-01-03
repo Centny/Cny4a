@@ -576,4 +576,43 @@ public class TestHttpCase extends
 
 		}
 	}
+
+	public void testStop() throws Throwable {
+		this.rerr = null;
+		final CountDownLatch cdl = new CountDownLatch(1);
+		this.runTestOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				HTTP.doGetDown("http://" + ts_ip + ":8000/dl?sw=1",
+						new HTTPNameDlCallback(dl.getAbsolutePath()) {
+
+							@Override
+							public OutputStream onBebin(HTTPClient c,
+									HTTPResponse r) throws Exception {
+								c.stop();
+								return super.onBebin(c, r);
+							}
+
+							@Override
+							public void onSuccess(HTTPClient c) {
+								super.onSuccess(c);
+								cdl.countDown();
+								rerr = new Exception("not error");
+							}
+
+							@Override
+							public void onError(HTTPClient c, Throwable err) {
+								super.onError(c, err);
+								cdl.countDown();
+							}
+
+						});
+			}
+		});
+		cdl.await();
+		if (this.rerr != null) {
+			assertNull(this.rerr.getMessage(), this.rerr);
+		}
+	}
 }

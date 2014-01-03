@@ -33,6 +33,7 @@ public abstract class HTTPClient {
 	protected HttpUriRequest request;
 	protected HTTPCallback cback;
 	protected int bsize = BUF_SIZE;
+	private boolean running = false;
 
 	/**
 	 * default constructor by URL and HTTPCallback.
@@ -231,6 +232,7 @@ public abstract class HTTPClient {
 	 */
 	public void exec() {
 		try {
+			this.running = true;
 			this.request = this.createRequest();
 			if (this.request == null) {
 				throw new Exception("the request is null");
@@ -253,12 +255,23 @@ public abstract class HTTPClient {
 				out.write(buf, 0, length);
 				rsize += length;
 				this.onProcess(rsize, clen);
+				if (!this.running) {
+					throw new InterruptedException("Transfter file stopped");
+				}
 			}
 			this.error = null;
 			this.cback.onEnd(this, out);
 		} catch (Exception e) {
 			this.error = e;
 		}
+		this.running = false;
+	}
+
+	/**
+	 * stop transfer.
+	 */
+	public void stop() {
+		this.running = false;
 	}
 
 	/**

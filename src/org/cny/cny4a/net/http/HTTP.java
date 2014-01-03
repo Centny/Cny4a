@@ -29,15 +29,17 @@ public class HTTP {
 	 *            the POST arguments.
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doPost(String url, List<BasicNameValuePair> args,
-			HTTPCallback cb) {
+	public static HTTPAsyncTask doPost(String url,
+			List<BasicNameValuePair> args, HTTPCallback cb) {
 		HTTPAsyncTask hc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			hc.getArgs().addAll(args);
 		}
 		hc.setMethod("POST");
 		hc.asyncExec();
+		return hc;
 	}
 
 	/**
@@ -49,15 +51,17 @@ public class HTTP {
 	 *            the GET arguments.
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doGet(String url, List<BasicNameValuePair> args,
-			HTTPCallback cb) {
+	public static HTTPAsyncTask doGet(String url,
+			List<BasicNameValuePair> args, HTTPCallback cb) {
 		HTTPAsyncTask hc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			hc.getArgs().addAll(args);
 		}
 		hc.setMethod("GET");
 		hc.asyncExec();
+		return hc;
 	}
 
 	/**
@@ -67,9 +71,10 @@ public class HTTP {
 	 *            the target URL
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doGet(String url, HTTPCallback cb) {
-		doGet(url, null, cb);
+	public static HTTPAsyncTask doGet(String url, HTTPCallback cb) {
+		return doGet(url, null, cb);
 	}
 
 	/**
@@ -81,15 +86,17 @@ public class HTTP {
 	 *            the GET arguments.
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doGetDown(String url, List<BasicNameValuePair> args,
-			HTTPDownCallback cb) {
+	public static HTTPAsyncTask doGetDown(String url,
+			List<BasicNameValuePair> args, HTTPDownCallback cb) {
 		HTTPAsyncTask dc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			dc.getArgs().addAll(args);
 		}
 		dc.setMethod("GET");
 		dc.asyncExec();
+		return dc;
 	}
 
 	/**
@@ -99,9 +106,10 @@ public class HTTP {
 	 *            the target URL.
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doGetDown(String url, HTTPDownCallback cb) {
-		doGetDown(url, null, cb);
+	public static HTTPAsyncTask doGetDown(String url, HTTPDownCallback cb) {
+		return doGetDown(url, null, cb);
 	}
 
 	/**
@@ -113,15 +121,17 @@ public class HTTP {
 	 *            the POST arguments.
 	 * @param cb
 	 *            HTTP call back instance.
+	 * @return the HTTPAsyncTask.
 	 */
-	public static void doPostDown(String url, List<BasicNameValuePair> args,
-			HTTPDownCallback cb) {
+	public static HTTPAsyncTask doPostDown(String url,
+			List<BasicNameValuePair> args, HTTPDownCallback cb) {
 		HTTPAsyncTask dc = new HTTPAsyncTask(url, cb);
 		if (args != null) {
 			dc.getArgs().addAll(args);
 		}
 		dc.setMethod("POST");
 		dc.asyncExec();
+		return dc;
 	}
 
 	/**
