@@ -1,16 +1,42 @@
 package org.cny.cny4a.net.http;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.security.InvalidParameterException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 
 /**
  * the main class for GET/POST.<br/>
@@ -27,13 +53,16 @@ public abstract class HTTPClient {
 	protected List<BasicNameValuePair> headers = new ArrayList<BasicNameValuePair>();
 	protected List<BasicNameValuePair> args = new ArrayList<BasicNameValuePair>();
 	protected String rencoding = "UTF-8";
-	protected HttpClient client = new DefaultHttpClient();
+	protected HttpClient client;
 	protected Throwable error;
 	protected HTTPResponse response;
 	protected HttpUriRequest request;
 	protected HTTPCallback cback;
 	protected int bsize = BUF_SIZE;
 	private boolean running = false;
+	private int phttp = 80;
+	private int phttps = 443;
+	private boolean https = false;
 
 	/**
 	 * default constructor by URL and HTTPCallback.
@@ -150,10 +179,10 @@ public abstract class HTTPClient {
 	}
 
 	/**
-	 * Set the HttpClient instance.
+	 * Set the HTTP client.
 	 * 
 	 * @param client
-	 *            the HttpClient.
+	 *            the client to set
 	 */
 	public void setClient(HttpClient client) {
 		this.client = client;
@@ -228,10 +257,68 @@ public abstract class HTTPClient {
 	}
 
 	/**
+	 * Get the HTTPS port.
+	 * 
+	 * @return the phttps
+	 */
+	public int getPhttps() {
+		return phttps;
+	}
+
+	/**
+	 * Set the HTTPS port.
+	 * 
+	 * @param phttps
+	 *            the phttps to set
+	 */
+	public void setPhttps(int phttps) {
+		this.phttps = phttps;
+	}
+
+	/**
+	 * If HTTPS.
+	 * 
+	 * @return the https
+	 */
+	public boolean isHttps() {
+		return https;
+	}
+
+	/**
+	 * Set if HTTPS.
+	 * 
+	 * @param https
+	 *            the https to set
+	 */
+	public void setHttps(boolean https) {
+		this.https = https;
+	}
+
+	/**
+	 * Get the HTTP port.
+	 * 
+	 * @return the phttp
+	 */
+	public int getPhttp() {
+		return phttp;
+	}
+
+	/**
+	 * Set the HTTP port.
+	 * 
+	 * @param phttp
+	 *            the phttp to set
+	 */
+	public void setPhttp(int phttp) {
+		this.phttp = phttp;
+	}
+
+	/**
 	 * execute the HTTP request.
 	 */
 	public void exec() {
 		try {
+			this.client = this.createClient();
 			this.running = true;
 			this.request = this.createRequest();
 			if (this.request == null) {
@@ -268,6 +355,122 @@ public abstract class HTTPClient {
 	}
 
 	/**
+	 * Get the HTTPS port.
+	 * 
+	 * @param url
+	 *            target URL.
+	 * @return the port,default is 443.
+	 */
+	static int httpsPort(String url) {
+		Pattern ptn = Pattern.compile("^http[s]?\\:\\/\\/[^\\:]*\\:[0-9]+");
+		Matcher m = ptn.matcher(url);
+		if (!m.find()) {
+			return 443;
+		}
+		String pu = m.group();
+		String sport = pu.substring(pu.lastIndexOf(":") + 1);
+		return Integer.parseInt(sport);
+	}
+
+	/**
+	 * Create the HttpClient.<br/>
+	 * it will check the URL if HTTPS and get the target port.
+	 * 
+	 * @return the HttpClient.
+	 * @throws Exception
+	 *             the err.
+	 */
+	protected HttpClient createClient() throws Exception {
+		if (this.url.matches("^https\\:\\/\\/.*$")) {
+			this.https = true;
+			this.phttps = httpsPort(this.url);
+		}
+		if (this.https) {
+			return this.newHttpsClient(this.phttp, this.phttps);
+		} else {
+			return new DefaultHttpClient();
+		}
+	}
+
+	/**
+	 * The full X509TrustManager.
+	 * 
+	 * @author cny
+	 * 
+	 */
+	public class FullX509TrustManager implements X509TrustManager {
+		@Override
+		public void checkClientTrusted(X509Certificate[] chain, String authType)
+				throws CertificateException {
+		}
+
+		@Override
+		public void checkServerTrusted(X509Certificate[] chain, String authType)
+				throws CertificateException {
+		}
+
+		@Override
+		public X509Certificate[] getAcceptedIssuers() {
+			return null;
+		}
+	};
+
+	/**
+	 * The full access SSL socket factory.
+	 * 
+	 * @author cny
+	 * 
+	 */
+	public class FullSSLSocketFactory extends SSLSocketFactory {
+		SSLContext ctx = SSLContext.getInstance("TLS");
+
+		public FullSSLSocketFactory(KeyStore truststore)
+				throws NoSuchAlgorithmException, KeyManagementException,
+				KeyStoreException, UnrecoverableKeyException {
+			super(truststore);
+			ctx.init(null, new TrustManager[] { new FullX509TrustManager() },
+					null);
+		}
+
+		@Override
+		public Socket createSocket(Socket socket, String host, int port,
+				boolean autoClose) throws IOException, UnknownHostException {
+			return ctx.getSocketFactory().createSocket(socket, host, port,
+					autoClose);
+		}
+
+		@Override
+		public Socket createSocket() throws IOException {
+			return ctx.getSocketFactory().createSocket();
+		}
+	}
+
+	/**
+	 * create HTTPS HttpClient.
+	 * 
+	 * @param https_p
+	 *            the HTTPS port.
+	 * @return the HttpClient.
+	 * @throws Exception
+	 *             the error.
+	 */
+	public HttpClient newHttpsClient(int http_p, int https_p) throws Exception {
+		KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+		trustStore.load(null, null);
+		SSLSocketFactory sf = new FullSSLSocketFactory(trustStore);
+		sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		HttpParams params = new BasicHttpParams();
+		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+		HttpProtocolParams.setContentCharset(params, "UTF-8");
+		SchemeRegistry registry = new SchemeRegistry();
+		registry.register(new Scheme("http", new PlainSocketFactory(), http_p));
+		registry.register(new Scheme("https", sf, https_p));
+		ClientConnectionManager ccm = new ThreadSafeClientConnManager(params,
+				registry);
+		return new DefaultHttpClient(ccm, params);
+	}
+
+	/**
 	 * stop transfer.
 	 */
 	public void stop() {
@@ -290,6 +493,12 @@ public abstract class HTTPClient {
 		}
 	}
 
+	/**
+	 * The on process method when transfer data.
+	 * 
+	 * @param rate
+	 *            the transfered rate.
+	 */
 	protected abstract void onProcess(float rate);
 
 	/**

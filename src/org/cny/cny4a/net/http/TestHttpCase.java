@@ -147,6 +147,7 @@ public class TestHttpCase extends
 				dc.getHeaders().addAll(args);
 				dc.setMethod("POST");
 				dc.setClient(new DefaultHttpClient());
+				assertEquals("POST", dc.getMethod());
 				dc.setRencoding("UTF-8");
 				dc.asyncExec();
 				// 9
@@ -156,7 +157,6 @@ public class TestHttpCase extends
 				dc.addHeader("b", "abc");
 				dc.addHeader("c", "这是中文");
 				dc.setMethod("POST");
-				dc.setClient(new DefaultHttpClient());
 				dc.setRencoding("UTF-8");
 				dc.asyncExec();
 			}
@@ -614,5 +614,81 @@ public class TestHttpCase extends
 		if (this.rerr != null) {
 			assertNull(this.rerr.getMessage(), this.rerr);
 		}
+	}
+
+	public void testHttps() throws Throwable {
+		this.rerr = null;
+		// HTTPClient.disableCertificateValidation();
+		final CountDownLatch cdl = new CountDownLatch(1);
+		final File p = new File(this.dl, "www.txt");
+		this.runTestOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				HTTP.doGetDown("https://14.23.162.171/",
+						new HTTPDownCallback(p.getAbsolutePath()) {
+
+							@Override
+							public void onSuccess(HTTPClient c) {
+								super.onSuccess(c);
+								cdl.countDown();
+								try {
+									HTTPClient.FullX509TrustManager fm = c.new FullX509TrustManager();
+									fm.checkClientTrusted(null, null);
+									fm.getAcceptedIssuers();
+								} catch (Exception e) {
+
+								}
+								try {
+									HTTPClient.FullSSLSocketFactory ff = c.new FullSSLSocketFactory(
+											null);
+									ff.createSocket();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+								assertEquals(true, c.isHttps());
+								assertEquals(443, c.getPhttps());
+								assertEquals(80, c.getPhttp());
+								c.setHttps(false);
+								c.setPhttps(4330);
+								c.setPhttp(800);
+								assertEquals(false, c.isHttps());
+								assertEquals(4330, c.getPhttps());
+								assertEquals(800, c.getPhttp());
+							}
+
+							@Override
+							public void onError(HTTPClient c, Throwable err) {
+								super.onError(c, err);
+								rerr = err;
+								cdl.countDown();
+							}
+
+						});
+
+			}
+		});
+		cdl.await();
+		if (this.rerr != null) {
+			assertNull(this.rerr.getMessage(), this.rerr);
+		}
+		File rp = new File(this.dl, "www.txt");
+		assertTrue(rp.getAbsolutePath() + " not found", rp.exists());
+		FileReader r = new FileReader(rp);
+		BufferedReader reader = new BufferedReader(r);
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			Log.e("Line", line);
+		}
+		reader.close();
+		assertTrue(new File(this.dl, "www.txt").delete());
+	}
+
+	public void testHttpsPort() {
+		assertEquals(443, HTTPClient.httpsPort("https://www.google.com"));
+		assertEquals(443, HTTPClient.httpsPort("https://www.google.com:"));
+		assertEquals(33, HTTPClient.httpsPort("https://www.google.com:33"));
+		assertEquals(33, HTTPClient.httpsPort("https://www.google.com:33a"));
+		assertEquals(443, HTTPClient.httpsPort("h://www.google.com:33"));
 	}
 }

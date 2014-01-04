@@ -40,6 +40,15 @@ public abstract class HTTPMClient extends HTTPClient {
 		return this;
 	}
 
+	/**
+	 * Get the request method.
+	 * 
+	 * @return the method
+	 */
+	public String getMethod() {
+		return method;
+	}
+
 	@Override
 	public HttpUriRequest createRequest() throws Exception {
 		if ("GET".equals(method)) {
@@ -72,4 +81,5 @@ public abstract class HTTPMClient extends HTTPClient {
 			return null;
 		}
 	}
+
 }
